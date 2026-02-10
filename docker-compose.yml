@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: zynetic_db
+    environment:
+      POSTGRES_USER: neondb_owner
+      POSTGRES_PASSWORD: npg_GWdMp4Ra2EBQ
+      POSTGRES_DB: zynetic
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  api:
+    build: .
+    container_name: zynetic_api
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_HOST: ep-solitary-unit-ad5uz5qt-pooler.c-2.us-east-1.aws.neon.tech
+      DATABASE_PORT: 5432
+      DATABASE_USER: neondb_owner
+      DATABASE_PASSWORD: npg_GWdMp4Ra2EBQ
+      DATABASE_NAME: zynetic
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
